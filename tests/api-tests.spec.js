@@ -42,3 +42,8 @@ test('API PUT request', async({request}) => {
     
     console.log(await response.json())
 })
+
+test.only('API DELETE request', async ({request})=> {
+    const response = await request.delete('https://reqres.in/api/users/2')
+    expect(response.status()).toBe(204)
+})
