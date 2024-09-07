@@ -14,7 +14,7 @@ test.describe.serial('User CRUD', () => {
         console.log(await response.json())
     })
 
-    test.only('API POST request', async ({ request }) => {
+    test('API POST request', async ({ request }) => {
         const response = await request.post(baseUrl + '/api/users', {
             data: {
                 "name": "Albert",
@@ -32,7 +32,7 @@ test.describe.serial('User CRUD', () => {
         userId = responseBody.id
     })
 
-    test.only('API PUT request', async ({ request }) => {
+    test('API PUT request', async ({ request }) => {
         const response = await request.put(baseUrl + '/users/' + userId, {
             data: {
                 "name": "Trebla",
@@ -48,7 +48,7 @@ test.describe.serial('User CRUD', () => {
         console.log(await response.json())
     })
 
-    test.only('API DELETE request', async ({ request }) => {
+    test('API DELETE request', async ({ request }) => {
         const response = await request.delete(baseUrl + '/users/' + userId)
         expect(response.status()).toBe(204)
     })
