@@ -1,49 +1,55 @@
 import { test, expect } from "@playwright/test"
 
-test('API GET request', async({request}) => {
-    const response = await request.get('https://reqres.in/api/users/2')
+test.describe.serial('User CRUD', () => {
+    let userId
+    let baseUrl = 'https://reqres.in/api'
+    test('API GET request', async ({ request }) => {
+        const response = await request.get(baseUrl + '/users/2')
 
-    expect(response.status()).toBe(200)
-    
-    const responseText = await response.text()
-    expect(responseText).toContain('Janet')
-    
-    console.log(await response.json())
-})
+        expect(response.status()).toBe(200)
 
-test('API POST request', async({request}) => {
-    const response = await request.post('https://reqres.in/api/users',{
-        data: {
-            "name": "Albert",
-            "job": "QA"
-        }
+        const responseText = await response.text()
+        expect(responseText).toContain('Janet')
+
+        console.log(await response.json())
     })
 
-    expect(response.status()).toBe(201)
-    
-    const responseText = await response.text()
-    expect(responseText).toContain('Albert')
-    
-    console.log(await response.json())
-})
+    test.only('API POST request', async ({ request }) => {
+        const response = await request.post(baseUrl + '/api/users', {
+            data: {
+                "name": "Albert",
+                "job": "QA"
+            }
+        })
 
-test('API PUT request', async({request}) => {
-    const response = await request.put('https://reqres.in/api/users/2',{
-        data: {
-            "name": "Albert",
-            "job": "QA"
-        }
+        expect(response.status()).toBe(201)
+
+        const responseText = await response.text()
+        expect(responseText).toContain('Albert')
+
+        const responseBody = JSON.parse(await response.text())
+        console.log(responseBody)
+        userId = responseBody.id
     })
 
-    expect(response.status()).toBe(200)
-    
-    const responseText = await response.text()
-    expect(responseText).toContain('Albert')
-    
-    console.log(await response.json())
-})
+    test.only('API PUT request', async ({ request }) => {
+        const response = await request.put(baseUrl + '/users/' + userId, {
+            data: {
+                "name": "Trebla",
+                "job": "AQ"
+            }
+        })
 
-test.only('API DELETE request', async ({request})=> {
-    const response = await request.delete('https://reqres.in/api/users/2')
-    expect(response.status()).toBe(204)
+        expect(response.status()).toBe(200)
+
+        const responseText = await response.text()
+        expect(responseText).toContain('Trebla')
+
+        console.log(await response.json())
+    })
+
+    test.only('API DELETE request', async ({ request }) => {
+        const response = await request.delete(baseUrl + '/users/' + userId)
+        expect(response.status()).toBe(204)
+    })
 })
